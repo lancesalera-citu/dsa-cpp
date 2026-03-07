@@ -17,13 +17,28 @@ class ArrayList : public List {
                 array = new_array;
                 capacity = new_size;
             }
-        }   
+        }
+
+        void dynamic_shrink() {
+            if(capacity == INITIAL_CAPACITY) return;
+            int new_size = capacity * 0.75;
+            if(new_size <= INITIAL_CAPACITY) new_size = INITIAL_CAPACITY;
+            int* new_array = (int*) realloc(array, new_size*sizeof(int));
+            if(new_array != nullptr) {
+                array = new_array;
+                capacity = new_size;
+            }
+        }
  
     public:
         ArrayList() {
-            array = (int*) calloc(INITIAL_CAPACITY, sizeof(int));
+            array = (int*) malloc(INITIAL_CAPACITY * sizeof(int));
             size = 0;
             capacity = INITIAL_CAPACITY;
+        }
+
+        ~ArrayList() {
+            free(array);
         }
 
         void add(int num) {
@@ -52,6 +67,10 @@ class ArrayList : public List {
                 array[i] = array[i+1];
             }
             size--;
+
+            if(size <= (2.0/3) * capacity) {
+                dynamic_shrink();
+            }
 
             return pos+1;
         }

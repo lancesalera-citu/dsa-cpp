@@ -1,5 +1,6 @@
 class List {
     public:
+        virtual ~List() = default;
         virtual void add(int num) = 0;
         virtual int get(int pos) = 0;
         virtual int remove(int num) = 0;
