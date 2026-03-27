@@ -42,8 +42,7 @@ class ArrayList : public List {
         }
 
         void add(int num) {
-            if(size == capacity) dynamic_expand();
-            array[size++] = num;
+            addLast(num);
         }
 
         int get(int pos) {
@@ -73,6 +72,50 @@ class ArrayList : public List {
             }
 
             return pos+1;
+        }
+
+        void addFirst(int num) {
+            if(size == capacity) dynamic_expand();
+
+            for(int i=size; i>0; i--) {
+                array[i] = array[i-1];
+            }
+
+            array[0] = num;
+            size++;
+        }
+
+        void addLast(int num) {
+            if(size == capacity) dynamic_expand();
+            array[size++] = num;
+        }
+
+        int removeFirst() {
+            if(size == 0) return -1;
+            
+            int removed = array[0];
+
+            for(int i=0; i<size-1; i++) {
+                array[i] = array[i+1];
+            }
+            size--;
+
+            if(size <= (2.0/3) * capacity) {
+                dynamic_shrink();
+            }
+
+            return removed;
+        }
+
+        int removeLast() {
+            if(size == 0) return -1;
+            int removed = array[--size];
+
+            if(size <= (2.0/3) * capacity) {
+                dynamic_shrink();
+            }
+
+            return removed;
         }
 
         void print() {
